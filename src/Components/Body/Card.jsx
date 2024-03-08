@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInitalMemeCard } from "../../Store/memeCardSlice";
 import Shemmer from "../Shemmer/Shemmer";
+import NotFound from "../404/NotFound";
 
 function Card() {
   const dataValue = useSelector((sate) => sate.cards.cardsData.memes);
   const pending = useSelector((sate) => sate.cards.loding);
-
+  const errorCheck = useSelector((sate) => sate.cards.seterror);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,6 +16,10 @@ function Card() {
 
   if (pending) {
     return <Shemmer />;
+  }
+
+  if (errorCheck === "rejected") {
+    return <NotFound />;
   }
 
   if (!dataValue) {

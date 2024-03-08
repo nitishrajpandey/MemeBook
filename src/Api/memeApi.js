@@ -4,8 +4,7 @@ export const memeApi = async (inputData) => {
         const { data } = await axios.get(`https://meme-api.com/gimme/${inputData}/50`)
         return data
     } catch (error) {
-        console.log(error);
-        return error
+        throw error
     }
 }
 
@@ -14,7 +13,6 @@ export const initalmemeApi = async () => {
         const { data } = await axios.get(`https://meme-api.com/gimme/50`)
         return data
     } catch (error) {
-        console.log(error);
-        return error
+        throw error
     }
 }

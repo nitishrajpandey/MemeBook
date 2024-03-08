@@ -4,12 +4,22 @@ import { initalmemeApi, memeApi } from "../Api/memeApi"
 // actions for api call 
 
 export const fetchMemeCard = createAsyncThunk("memesfetchMemeCards", async (inpuData = "modi") => {
-    const data = await memeApi(inpuData)
-    return data
+    try {
+        const data = await memeApi(inpuData)
+        return data
+    } catch (error) {
+        throw error
+    }
+
 });
 export const fetchInitalMemeCard = createAsyncThunk("memesfetchInitialMemeCards", async () => {
-    const data = await initalmemeApi()
-    return data
+    try {
+        const data = await initalmemeApi()
+        return data
+    } catch (error) {
+        throw error
+    }
+
 });
 
 export const memeCardSlice = createSlice({
@@ -23,33 +33,30 @@ export const memeCardSlice = createSlice({
 
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchMemeCard.fulfilled, (state, action) => {
-            state.cardsData = action.payload,
-                state.loding = false,
-                state.seterror = null
-
-        })
-            .addCase(fetchMemeCard.pending, (state, action) => {
-                state.loding = true,
-                    state.seterror = null
-
-            })
-            .addCase(fetchMemeCard.rejected, (state, action) => {
-                state.seterror = action.error.message,
-                    state.loding = false
-            })
-            .addCase(fetchInitalMemeCard.fulfilled, (state, action) => {
+        builder
+            .addCase(fetchMemeCard.fulfilled, (state, action) => {
                 state.cardsData = action.payload,
                     state.loding = false,
                     state.seterror = null
             })
+            .addCase(fetchMemeCard.pending, (state, action) => {
+                state.loding = true
+            })
+            .addCase(fetchMemeCard.rejected, (state, action) => {
+                state.seterror = action.meta.requestStatus,
+                    state.loding = false
+            })
+            .addCase(fetchInitalMemeCard.fulfilled, (state, action) => {
+                state.cardsData = action.payload,
+                    state.loding = false
+
+            })
             .addCase(fetchInitalMemeCard.pending, (state, action) => {
-                state.loding = true,
-                    state.seterror = null
+                state.loding = true
 
             })
             .addCase(fetchInitalMemeCard.rejected, (state, action) => {
-                state.seterror = action.error.message,
+                state.seterror = action.meta.requestStatus,
                     state.loding = false
             })
 
